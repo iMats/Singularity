@@ -18,15 +18,15 @@ import com.hubspot.singularity.data.history.SingularityMappers.SingularityReques
 
 public interface PostgresHistoryJDBI extends AbstractHistoryJDBI {
 
-  @SqlUpdate("INSERT INTO requestHistory (requestId, json, createdAt, requestState, f_user, message) VALUES (:requestId, :json, :createdAt, :requestState, :user, :message)")
+  @SqlUpdate("INSERT INTO requestHistory (requestId, json, createdAt, requestState, f_user, message) VALUES (:requestId, :json::json, :createdAt, :requestState::requestState, :user, :message)")
   void insertRequestHistory(@Bind("requestId") String requestId, @Bind("json") @Json SingularityRequest request, @Bind("createdAt") Date createdAt,
                             @Bind("requestState") String requestState, @Bind("user") String user, @Bind("message") String message);
 
-  @SqlUpdate("INSERT INTO deployHistory (requestId, deployId, createdAt, f_user, message, deployStateAt, deployState, json) VALUES (:requestId, :deployId, :createdAt, :user, :message, :deployStateAt, :deployState, :json)")
+  @SqlUpdate("INSERT INTO deployHistory (requestId, deployId, createdAt, f_user, message, deployStateAt, deployState, json) VALUES (:requestId, :deployId, :createdAt, :user, :message, :deployStateAt, :deployState::deployState, :json::json)")
   void insertDeployHistory(@Bind("requestId") String requestId, @Bind("deployId") String deployId, @Bind("createdAt") Date createdAt, @Bind("user") String user,
                            @Bind("message") String message, @Bind("deployStateAt") Date deployStateAt, @Bind("deployState") String deployState, @Bind("json") @Json SingularityDeployHistory deployHistory);
 
-  @SqlUpdate("INSERT INTO taskHistory (requestId, taskId, json, updatedAt, lastTaskStatus, runId, deployId, host, startedAt, purged) VALUES (:requestId, :taskId, :json, :updatedAt, :lastTaskStatus, :runId, :deployId, :host, :startedAt, false)")
+  @SqlUpdate("INSERT INTO taskHistory (requestId, taskId, json, updatedAt, lastTaskStatus, runId, deployId, host, startedAt, purged) VALUES (:requestId, :taskId, :json::json, :updatedAt, :lastTaskStatus::lastTaskStatus, :runId, :deployId, :host, :startedAt, false)")
   void insertTaskHistory(@Bind("requestId") String requestId, @Bind("taskId") String taskId, @Bind("json") @Json SingularityTaskHistory taskHistory, @Bind("updatedAt") Date updatedAt,
                          @Bind("lastTaskStatus") String lastTaskStatus, @Bind("runId") String runId, @Bind("deployId") String deployId, @Bind("host") String host,
                          @Bind("startedAt") Date startedAt);
